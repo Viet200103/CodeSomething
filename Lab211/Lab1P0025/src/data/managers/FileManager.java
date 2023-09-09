@@ -28,9 +28,10 @@ public class FileManager implements IFileManager {
     @Override
     public void saveItem(String rawData) throws Exception {
 
-        FileWriter fileWriter = new FileWriter(inputFile);
+        FileWriter fileWriter = new FileWriter(inputFile, true);
 
         try (BufferedWriter bWriter = new BufferedWriter(fileWriter)) {
+            bWriter.newLine();
             bWriter.append(rawData);
         }
     }
