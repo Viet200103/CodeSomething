@@ -5,20 +5,27 @@ import data.dao.product.IProductDao;
 import data.dao.product.ProductDao;
 import data.managers.IFileManager;
 
+import java.util.List;
+
 public class ProductRepository implements IProductRepository {
 
-    private IProductDao productDao;
+    private final IProductDao productDao;
 
     private static ProductRepository INSTANCE;
 
 
-    public ProductRepository(IFileManager fileManager) throws Exception {
+    public ProductRepository(IFileManager fileManager) {
         this.productDao = new ProductDao(fileManager);
     }
 
     @Override
     public void addNewProduct(Product product) throws Exception {
         productDao.addNewProduct(product);
+    }
+
+    @Override
+    public List<Product> loadAllProduct() throws Exception {
+        return productDao.loadProductFromFile();
     }
 
     public static IProductRepository getInstance(IFileManager fileManager) {

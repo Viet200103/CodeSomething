@@ -11,19 +11,18 @@ import data.managers.FileManager;
 import data.managers.IFileManager;
 import data.repositories.ProductRepository;
 
-import java.text.ParseException;
-
 public class ProductManagement {
 
-    private IFileManager fileManager = new FileManager(FileManager.PRODUCT_FILE_NAME);
+    private final IFileManager fileManager = new FileManager(FileManager.PRODUCT_FILE_NAME);
 
-    private DataIOHelper inputHelper = DataIOHelper.getInstance();
+    private final DataIOHelper inputHelper = DataIOHelper.getInstance();
 
-    private ItemService<Product> itemService = new ProductService(
+    private final ItemService<Product> itemService = new ProductService(
             ProductRepository.getInstance(fileManager)
     );
 
     public void displayMenu() {
+
         try {
             int choice;
             boolean isRunning = true;
@@ -51,14 +50,14 @@ public class ProductManagement {
 
                     }
                     case 4 -> {
-
+                        DataIOHelper.printlnMessage(">>>>>> Product List >>>>>>");
+                        itemService.printList();
+                        DataIOHelper.printlnMessage("--------------------------------");
                     }
                     case 5 -> {
                         isRunning = false;
                     }
-                    default -> {
-                        Menu.printRequireNotFound();
-                    }
+                    default -> Menu.printRequireNotFound();
                 }
 
             } while (isRunning);
@@ -106,7 +105,7 @@ public class ProductManagement {
                 DataIOHelper.printlnMessage("Enter Product type: ");
                 Menu.print(
                         "1. Daily usage" + "|" +
-                        "2. Long life usage"
+                                "2. Long life usage"
                 );
 
                 typeChoice = inputHelper.getIntegerNumber();

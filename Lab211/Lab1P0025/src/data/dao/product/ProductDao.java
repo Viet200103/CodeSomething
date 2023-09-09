@@ -4,28 +4,23 @@ import business.entities.Product;
 import business.utilities.ProductType;
 import data.managers.IFileManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ProductDao implements IProductDao {
     private IFileManager fileManager;
-
-    private final List<Product> productList = new ArrayList<>();
 
     private ProductDao() {
 
     }
 
-    public ProductDao(IFileManager fileManager) throws Exception {
+    public ProductDao(IFileManager fileManager)  {
         this.fileManager = fileManager;
-        loadProductFromFile();
     }
 
     @Override
-    public void loadProductFromFile() throws Exception {
+    public List<Product> loadProductFromFile() throws Exception {
         List<String> dataList = fileManager.readDataFromFile();
+        List<Product> productList = new ArrayList<>();
 
         String code;
         ProductType type = null;
@@ -40,12 +35,8 @@ public class ProductDao implements IProductDao {
             code = raws.get(0).trim();
 
             switch (Integer.parseInt(raws.get(1).trim())) {
-                case 0 -> {
-                    type = ProductType.DAILY;
-                }
-                case 1 -> {
-                    type = ProductType.LONG_LIFE;
-                }
+                case 0 -> type = ProductType.DAILY;
+                case 1 -> type = ProductType.LONG_LIFE;
             }
 
             name = raws.get(2).trim();
@@ -58,20 +49,30 @@ public class ProductDao implements IProductDao {
             );
 
             Product product = new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
-            addNewProduct(product);
+            productList.add(product);
         }
+        return productList;
     }
 
     @Override
-    public void addNewProduct(Product product) {
-       boolean isExists = productList.stream().anyMatch(
-               p -> Objects.equals(p.getCode(), product.getCode())
-       );
+    public void addNewProduct(Product product) throws Exception {
+       boolean isExists = fileManager.isCodeExists(product.getCode());
 
        if (isExists) {
            throw new IllegalArgumentException("Product code is duplicated");
        }
 
-       productList.add(product);
+       fileManager.saveItem(productToRawData(product));
+    }
+
+    private String productToRawData(Product product) {
+        return product.getCode() + ','
+                + product.getType().getValue() + ','
+                + product.getName() + ','
+                + product.getMaker() + ','
+                + product.getManufacturingDate() + ','
+                + product.getManufacturingDate() + ','
+                + product.getQuantity();
+
     }
 }

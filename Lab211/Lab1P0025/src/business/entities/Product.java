@@ -2,10 +2,7 @@ package business.entities;
 
 import business.utilities.ProductType;
 
-import java.util.Objects;
-
-public class Product {
-    private String code;
+public class Product extends Item {
     private String name;
     private ProductType type;
 
@@ -16,10 +13,6 @@ public class Product {
 
     private int quantity;
 
-    private Product() {
-
-    }
-
     public Product(
             String code,
             ProductType type,
@@ -29,17 +22,13 @@ public class Product {
             String expirationDate,
             int quantity
     ) {
-        this.code = code;
+        super(code);
         this.name = name;
         this.type = type;
         this.maker = maker;
-        this.quantity = quantity;
         this.manufacturingDate = manufacturingDate;
         this.expirationDate = expirationDate;
-    }
-
-    public String getCode() {
-        return code;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -58,8 +47,19 @@ public class Product {
         return manufacturingDate;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public String getExpirationDate() {
         return expirationDate;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "%s, %s, %s, %s, %s, %s, %s",
+                getCode(), type, name, maker, manufacturingDate, expirationDate, quantity
+        );
+    }
 }

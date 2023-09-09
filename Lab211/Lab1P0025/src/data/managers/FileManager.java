@@ -1,12 +1,9 @@
 package data.managers;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Objects;
 
 public class FileManager implements IFileManager {
 
@@ -20,16 +17,43 @@ public class FileManager implements IFileManager {
         inputFile = new File(fileName);
     }
 
-    public FileManager(File inputFile) {
-        this.inputFile = inputFile;
-    }
-
     @Override
     public List<String> readDataFromFile() throws IOException {
         List<String> result;
         result = Files.readAllLines(inputFile.toPath(), StandardCharsets.UTF_8);
         return result;
     }
+
+
+    @Override
+    public void saveItem(String rawData) throws Exception {
+
+        FileWriter fileWriter = new FileWriter(inputFile);
+
+        try (BufferedWriter bWriter = new BufferedWriter(fileWriter)) {
+            bWriter.append(rawData);
+        }
+    }
+
+    @Override
+    public boolean isCodeExists(String itemCode) throws Exception {
+        FileReader fileReader = new FileReader(inputFile);
+        BufferedReader bReader = new BufferedReader(fileReader);
+
+        try {
+            String line;
+            while ((line = bReader.readLine()) != null) {
+                if (line.startsWith(itemCode)) {
+                    return true;
+                }
+            }
+        } finally {
+            bReader.close();
+        }
+
+        return false;
+    }
+
 
     public static final String PRODUCT_FILE_NAME = "product.txt";
     public static final String WAREHOUSE_FILE_NAME = "warehouse.txt";
