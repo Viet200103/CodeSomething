@@ -17,13 +17,24 @@ public class ProductService implements ItemService<Product> {
     }
 
     @Override
+    public void delete(String itemCode) {
+        try {
+            pRepository.deleteProduct(itemCode);
+            System.out.println(">> Delete product with code: " + itemCode + " is succeed");
+        } catch (Exception e) {
+            System.out.println(">> Delete product with code: " + itemCode + " is failed!.");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
     public void printList() {
         try {
             pRepository.loadAllProduct().forEach(
                     System.out::println
             );
         } catch (Exception e) {
-            System.out.println("Load data from file is failed");
+            System.out.println(">> Load data from file is failed");
         }
     }
 }

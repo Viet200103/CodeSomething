@@ -9,4 +9,6 @@ public interface IProductDao {
     List<Product> loadProductFromFile() throws Exception;
 
     void addNewProduct(Product product) throws Exception;
+
+    void deleteProduct(String code) throws Exception;
 }

@@ -65,6 +65,18 @@ public class ProductDao implements IProductDao {
        fileManager.saveItem(productToRawData(product));
     }
 
+    @Override
+    public void deleteProduct(String code) throws Exception {
+        List<String> dataList = fileManager.readDataFromFile();
+        boolean isDeleted = dataList.removeIf(
+                (product) -> product.startsWith(code)
+        );
+
+        if (isDeleted) {
+            fileManager.commit(dataList);
+        }
+    }
+
     private String productToRawData(Product product) {
         return product.getCode() + ','
                 + product.getType().getValue() + ','

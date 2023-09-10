@@ -24,6 +24,22 @@ public class FileManager implements IFileManager {
         return result;
     }
 
+    @Override
+    public void commit(List<String> rawList) throws IOException {
+        FileWriter fileWriter = new FileWriter(inputFile, false);
+
+        try (BufferedWriter bWriter = new BufferedWriter(fileWriter)) {
+
+            StringBuilder sBuilder = new StringBuilder();
+            for (String raw : rawList) {
+                sBuilder.append(raw).append("\n");
+            }
+            sBuilder.deleteCharAt(sBuilder.length() - 1);
+
+            bWriter.write(sBuilder.toString());
+        }
+    }
+
 
     @Override
     public void saveItem(String rawData) throws Exception {

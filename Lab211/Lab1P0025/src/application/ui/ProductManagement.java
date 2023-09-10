@@ -40,15 +40,11 @@ public class ProductManagement {
                 System.out.println("--------------------------------");
 
                 switch (choice) {
-                    case 1 -> {
-                        addNewEmployee();
-                    }
+                    case 1 -> addNewProduct();
                     case 2 -> {
 
                     }
-                    case 3 -> {
-
-                    }
+                    case 3 -> deleteProduct();
                     case 4 -> {
                         DataIOHelper.printlnMessage(">>>>>> Product List >>>>>>");
                         itemService.printList();
@@ -188,7 +184,7 @@ public class ProductManagement {
         return quantity;
     }
 
-    private void addNewEmployee() {
+    private void addNewProduct() {
         boolean isContinue;
         do {
             try {
@@ -200,10 +196,28 @@ public class ProductManagement {
             }
 
             DataIOHelper.printlnMessage("--------------------------------");
-            DataIOHelper.printMessage("Do you want to continues(Y/N)? ");
+            DataIOHelper.printMessage("Do you want to continue(Y/N)? ");
             isContinue = inputHelper.getString().matches("[\\s{y, Y}]");
             DataIOHelper.printlnMessage("--------------------------------");
 
         } while (isContinue);
+    }
+
+    private void deleteProduct() {
+        String code = inputHelper.getStringWithMessage("Enter Product code: ");
+
+        DataIOHelper.printlnMessage("Data of product will be delete and can not restore");
+        DataIOHelper.printMessage("Do you want to continue(Y?N)? ");
+
+        String action = inputHelper.getString();
+
+        if (action.matches("[\\s{y, Y}]")) {
+            try {
+                itemService.delete(code);
+            } catch (Exception e) {
+
+            }
+        }
+        DataIOHelper.printlnMessage("--------------------------------");
     }
 }

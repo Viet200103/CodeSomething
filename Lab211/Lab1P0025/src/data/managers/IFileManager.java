@@ -9,4 +9,6 @@ public interface IFileManager {
     void saveItem(String rawData) throws Exception;
 
     boolean isCodeExists(String itemCode) throws Exception;
+
+    void commit(List<String> raw) throws Exception;
 }

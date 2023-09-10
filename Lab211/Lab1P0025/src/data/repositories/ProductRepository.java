@@ -24,6 +24,20 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
+    public void deleteProduct(String productCode) throws Exception {
+        boolean isReceiptGenerated = isProductReceiptExist(productCode);
+        if (isReceiptGenerated) {
+            throw new RuntimeException("Can not delete product once receipt is generated");
+        }
+
+        productDao.deleteProduct(productCode);
+    }
+
+    private boolean isProductReceiptExist(String productCode) {
+        return false;
+    }
+
+    @Override
     public List<Product> loadAllProduct() throws Exception {
         return productDao.loadProductFromFile();
     }

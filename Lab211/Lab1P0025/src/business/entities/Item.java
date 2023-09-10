@@ -1,6 +1,6 @@
 package business.entities;
 
-abstract class Item {
+public abstract class Item {
     private String code;
 
 
