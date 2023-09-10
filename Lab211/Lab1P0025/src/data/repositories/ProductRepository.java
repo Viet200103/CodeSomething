@@ -19,18 +19,28 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
+    public Product getProduct(String code) throws Exception {
+        return productDao.loadProduct(code);
+    }
+
+    @Override
     public void addNewProduct(Product product) throws Exception {
         productDao.addNewProduct(product);
     }
 
     @Override
-    public void deleteProduct(String productCode) throws Exception {
+    public boolean deleteProduct(String productCode) throws Exception {
         boolean isReceiptGenerated = isProductReceiptExist(productCode);
         if (isReceiptGenerated) {
             throw new RuntimeException("Can not delete product once receipt is generated");
         }
 
-        productDao.deleteProduct(productCode);
+        return productDao.deleteProduct(productCode);
+    }
+
+    @Override
+    public boolean updateProduct(Product product) throws Exception {
+        return productDao.updateProduct(product);
     }
 
     private boolean isProductReceiptExist(String productCode) {
@@ -38,7 +48,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public List<Product> loadAllProduct() throws Exception {
+    public List<Product> getAllProducts() throws Exception {
         return productDao.loadProductFromFile();
     }
 

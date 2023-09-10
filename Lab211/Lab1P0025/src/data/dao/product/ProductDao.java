@@ -18,40 +18,49 @@ public class ProductDao implements IProductDao {
     }
 
     @Override
+    public Product loadProduct(String code) throws Exception {
+        String productRaw = fileManager.readItemByCode(code);
+
+        if (productRaw == null) {
+            return null;
+        }
+
+        return rawDataToProduct(productRaw);
+    }
+
+    @Override
     public List<Product> loadProductFromFile() throws Exception {
         List<String> dataList = fileManager.readDataFromFile();
         List<Product> productList = new ArrayList<>();
 
-        String code;
-        ProductType type = null;
-        String name;
-        String maker;
-        String manufacturingDate;
-        String expirationDate;
-
         for (String productRaw: dataList) {
-            List<String> raws = Arrays.asList(productRaw.split(","));
-
-            code = raws.get(0).trim();
-
-            switch (Integer.parseInt(raws.get(1).trim())) {
-                case 0 -> type = ProductType.DAILY;
-                case 1 -> type = ProductType.LONG_LIFE;
-            }
-
-            name = raws.get(2).trim();
-            maker = raws.get(3).trim();
-            manufacturingDate = raws.get(4).trim();
-            expirationDate = raws.get(5).trim();
-
-            int quantity = Integer.parseInt(
-                    raws.get(6).trim()
-            );
-
-            Product product = new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
+            Product product = rawDataToProduct(productRaw);
             productList.add(product);
         }
         return productList;
+    }
+
+    private Product rawDataToProduct(String raw) {
+        List<String> raws = Arrays.asList(raw.split(","));
+
+        String code = raws.get(0).trim();
+
+        ProductType type = null;
+        switch (Integer.parseInt(raws.get(1).trim())) {
+            case 0 -> type = ProductType.DAILY;
+            case 1 -> type = ProductType.LONG_LIFE;
+        }
+
+        String name = raws.get(2).trim();
+        String maker = raws.get(3).trim();
+        String manufacturingDate = raws.get(4).trim();
+        String expirationDate = raws.get(5).trim();
+
+        int quantity = Integer.parseInt(
+                raws.get(6).trim()
+        );
+
+        return new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
     }
 
     @Override
@@ -66,15 +75,44 @@ public class ProductDao implements IProductDao {
     }
 
     @Override
-    public void deleteProduct(String code) throws Exception {
+    public boolean deleteProduct(String code) throws Exception {
         List<String> dataList = fileManager.readDataFromFile();
+        String codeExpected = code + ",";
         boolean isDeleted = dataList.removeIf(
-                (product) -> product.startsWith(code)
+                (product) -> product.startsWith(codeExpected)
         );
 
         if (isDeleted) {
             fileManager.commit(dataList);
         }
+
+        return isDeleted;
+    }
+
+    @Override
+    public boolean updateProduct(Product product) throws Exception {
+        String productRaw = productToRawData(product);
+        List<String> dataList = fileManager.readDataFromFile();
+
+        boolean isUpdated = false;
+
+        String codeExpected = product.getCode() + ",";
+        for (int i = 0; i < dataList.size() ; i++) {
+            String raw = dataList.get(i);
+
+
+            if (raw.startsWith(codeExpected)) {
+                dataList.set(i, productRaw);
+                isUpdated = true;
+                break;
+            }
+        }
+
+        if (isUpdated) {
+            fileManager.commit(dataList);
+        }
+
+        return isUpdated;
     }
 
     private String productToRawData(Product product) {

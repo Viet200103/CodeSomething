@@ -18,6 +18,20 @@ public class FileManager implements IFileManager {
     }
 
     @Override
+    public String readItemByCode(String code) throws Exception {
+        try (BufferedReader bReader = getReader()) {
+            String line;
+            String codeExpected = code + ",";
+            while ((line = bReader.readLine()) != null) {
+                if (line.startsWith(codeExpected)) {
+                    return line;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public List<String> readDataFromFile() throws IOException {
         List<String> result;
         result = Files.readAllLines(inputFile.toPath(), StandardCharsets.UTF_8);
@@ -43,10 +57,7 @@ public class FileManager implements IFileManager {
 
     @Override
     public void saveItem(String rawData) throws Exception {
-
-        FileWriter fileWriter = new FileWriter(inputFile, true);
-
-        try (BufferedWriter bWriter = new BufferedWriter(fileWriter)) {
+        try (BufferedWriter bWriter = getWriter()) {
             bWriter.newLine();
             bWriter.append(rawData);
         }
@@ -54,23 +65,29 @@ public class FileManager implements IFileManager {
 
     @Override
     public boolean isCodeExists(String itemCode) throws Exception {
-        FileReader fileReader = new FileReader(inputFile);
-        BufferedReader bReader = new BufferedReader(fileReader);
 
-        try {
+        try (BufferedReader bReader = getReader()) {
             String line;
+            String codeExpected = itemCode + ",";
             while ((line = bReader.readLine()) != null) {
-                if (line.startsWith(itemCode)) {
+                if (line.startsWith(codeExpected)) {
                     return true;
                 }
             }
-        } finally {
-            bReader.close();
         }
 
         return false;
     }
 
+    private BufferedReader getReader() throws FileNotFoundException {
+        FileReader fileReader = new FileReader(inputFile);
+        return new BufferedReader(fileReader);
+    }
+
+    private BufferedWriter getWriter() throws IOException {
+        FileWriter fileWriter = new FileWriter(inputFile, true);
+        return new BufferedWriter(fileWriter);
+    }
 
     public static final String PRODUCT_FILE_NAME = "product.txt";
     public static final String WAREHOUSE_FILE_NAME = "warehouse.txt";

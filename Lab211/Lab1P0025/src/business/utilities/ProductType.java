@@ -1,11 +1,11 @@
 package business.utilities;
 
 public enum ProductType {
-    DAILY(0), LONG_LIFE(1);
+    DAILY(0), LONG_LIFE(1), EMPTY(-1);
 
-    private int value;
+    private final int value;
 
-    private ProductType(int value) {
+    ProductType(int value) {
         this.value = value;
     }
 

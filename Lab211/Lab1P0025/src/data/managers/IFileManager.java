@@ -6,6 +6,8 @@ public interface IFileManager {
 
     List<String> readDataFromFile() throws Exception;
 
+    String readItemByCode(String code) throws Exception;
+
     void saveItem(String rawData) throws Exception;
 
     boolean isCodeExists(String itemCode) throws Exception;

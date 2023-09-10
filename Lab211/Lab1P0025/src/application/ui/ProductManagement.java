@@ -40,42 +40,46 @@ public class ProductManagement {
                 System.out.println("--------------------------------");
 
                 switch (choice) {
-                    case 1 -> addNewProduct();
-                    case 2 -> {
-
-                    }
+                    case 1 -> processWithUserLoop(this::addNewProduct);
+                    case 2 -> updateProduct();
                     case 3 -> deleteProduct();
                     case 4 -> {
                         DataIOHelper.printlnMessage(">>>>>> Product List >>>>>>");
                         itemService.printList();
                         DataIOHelper.printlnMessage("--------------------------------");
                     }
-                    case 5 -> {
-                        isRunning = false;
-                    }
+                    case 5 -> isRunning = false;
                     default -> Menu.printRequireNotFound();
                 }
 
             } while (isRunning);
 
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }
 
     public Product getProduct() {
         String code = getProductCode();
 
-        ProductType type = getProductType();
+        ProductType type = getProductType(false);
 
-        String name = inputHelper.getStringWithMessage("Enter Product name: ");
-        String maker = inputHelper.getStringWithMessage("Enter Product maker: ");
-        String manufacturingDate = getManufacturingDate();
+        String name = getProductName();
+        String maker = getProductMaker();
+        String manufacturingDate = getManufacturingDate(false);
         String expirationDate = getExpirationDate(manufacturingDate);
 
-        int quantity = getProductQuantity();
+        int quantity = getProductQuantity(false);
 
         return new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
+    }
+
+    private String getProductName() {
+        return inputHelper.getStringWithMessage("Enter Product name: ");
+    }
+
+    private String getProductMaker() {
+        return inputHelper.getStringWithMessage("Enter Product maker: ");
     }
 
     private String getProductCode() {
@@ -87,24 +91,38 @@ public class ProductManagement {
                 DataValidation.requireNotNullEmpty(code, "Product code is not validated");
                 break;
             } catch (Exception e) {
-                DataIOHelper.printlnMessage(e.getMessage());
+                DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
         return code;
     }
 
-    private ProductType getProductType() {
+    private ProductType getProductType(boolean acceptEmpty) {
         do {
             try {
                 int typeChoice;
                 DataIOHelper.printlnMessage("Enter Product type: ");
                 Menu.print(
                         "1. Daily usage" + "|" +
-                                "2. Long life usage"
+                        "2. Long life usage"
                 );
 
-                typeChoice = inputHelper.getIntegerNumber();
+                if (acceptEmpty) {
+                    String sType = inputHelper.getString();
+                    if (sType.isBlank()) {
+                        return ProductType.EMPTY;
+                    }
+
+                    try {
+                        typeChoice = Integer.parseInt(sType);
+                    }catch (Exception e) {
+                        throw new IllegalArgumentException("The product type is not valid");
+                    }
+
+                } else {
+                    typeChoice = inputHelper.getIntegerNumber();
+                }
 
                 switch (typeChoice) {
                     case 1 -> {
@@ -116,14 +134,14 @@ public class ProductManagement {
                     default -> throw new IllegalArgumentException("The product type is not valid");
                 }
             } catch (Exception e) {
-                DataIOHelper.printlnMessage(e.getMessage());
+                DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
     }
 
-    private String getManufacturingDate() {
-        return getProductDate("Enter Product manufacturing date");
+    private String getManufacturingDate(boolean acceptEmpty) {
+        return getProductDate(acceptEmpty, "Enter Product manufacturing date");
     }
 
     private String getExpirationDate(String manufacturingDate) {
@@ -131,11 +149,11 @@ public class ProductManagement {
 
         do {
             try {
-                expirationDate = getProductDate("Enter Product expiration date");
+                expirationDate = getProductDate(true, "Enter Product expiration date");
                 DateUtils.validateExpirationDate(manufacturingDate, expirationDate);
                 break;
             } catch (Exception e) {
-                DataIOHelper.printlnMessage(e.getMessage());
+                DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
@@ -144,7 +162,7 @@ public class ProductManagement {
         return expirationDate;
     }
 
-    private String getProductDate(String msg) {
+    private String getProductDate(boolean acceptEmpty, String msg) {
         String date;
 
         do {
@@ -155,11 +173,13 @@ public class ProductManagement {
 
                 date = inputHelper.getString();
 
+                if (date.isBlank() && acceptEmpty) return date;
+
                 DateUtils.checkFormatDate(date);
 
                 break;
             } catch (Exception e) {
-                DataIOHelper.printlnMessage(e.getMessage());
+                DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
@@ -167,40 +187,35 @@ public class ProductManagement {
         return date;
     }
 
-    private int getProductQuantity() {
+    private int getProductQuantity(boolean acceptEmpty) {
         int quantity;
         do {
             try {
-                quantity = inputHelper.getIntegerNumberWithMessage("Enter Product quantity: ");
+                String str = inputHelper.getStringWithMessage("Enter Product quantity: ");
 
-                DataValidation.requirePositiveInteger(quantity, "Quantity of product must be positive integer");
+                if (str.isBlank() && acceptEmpty) {
+                    return -1;
+                }
+
+                DataValidation.requirePositiveInteger(str, "Quantity of product must be positive integer");
+                quantity = Integer.parseInt(str);
                 break;
             } catch (Exception e) {
-                DataIOHelper.printlnMessage(e.getMessage());
+                DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
-
         return quantity;
     }
 
     private void addNewProduct() {
-        boolean isContinue;
-        do {
-            try {
-                Product newEmployee = getProduct();
-                itemService.add(newEmployee);
-                System.out.println(">>Product added successfully.");
-            } catch (Exception e) {
-                System.out.println(">>" + e.getMessage());
-            }
-
-            DataIOHelper.printlnMessage("--------------------------------");
-            DataIOHelper.printMessage("Do you want to continue(Y/N)? ");
-            isContinue = inputHelper.getString().matches("[\\s{y, Y}]");
-            DataIOHelper.printlnMessage("--------------------------------");
-
-        } while (isContinue);
+        try {
+            Product newEmployee = getProduct();
+            itemService.add(newEmployee);
+            System.out.println(">>Product added successfully.");
+        } catch (Exception e) {
+            System.out.println(">>" + e.getMessage());
+        }
     }
 
     private void deleteProduct() {
@@ -212,12 +227,94 @@ public class ProductManagement {
         String action = inputHelper.getString();
 
         if (action.matches("[\\s{y, Y}]")) {
-            try {
-                itemService.delete(code);
-            } catch (Exception e) {
-
-            }
+            itemService.delete(code);
         }
         DataIOHelper.printlnMessage("--------------------------------");
+    }
+
+    private void updateProduct() {
+        String code = inputHelper.getStringWithMessage("Enter product code: ");
+
+        try {
+            Product oldProduct = itemService.productExist(code);
+            DataIOHelper.printlnNotification(oldProduct.toString());
+
+            ProductType productType = getProductType(true);
+            if (productType == ProductType.EMPTY) {
+                productType = oldProduct.getType();
+            }
+
+            String newName = ifBlank(getProductName(), oldProduct.getName());
+            String maker = ifBlank(getProductMaker(), oldProduct.getMaker());
+
+            String manufacturingDate = ifBlank(
+                    getManufacturingDate(true),
+                    oldProduct.getManufacturingDate()
+            );
+
+            String expirationDate = getExpirationUpdate(
+                    oldProduct.getExpirationDate(), manufacturingDate
+            );
+
+            int quantity = getProductQuantity(true);
+
+            if (quantity == -1) {
+                quantity = oldProduct.getQuantity();
+            }
+
+            Product newProduct = new Product(
+                    oldProduct.getCode(),
+                    productType,
+                    newName,
+                    maker,
+                    manufacturingDate,
+                    expirationDate,
+                    quantity
+            );
+
+            itemService.update(newProduct);
+        } catch (Exception e) {
+            DataIOHelper.printlnNotification(e.getMessage());
+        }
+
+        DataIOHelper.printlnMessage("--------------------------------");
+    }
+
+    private String getExpirationUpdate(String oldDate, String manufacturingDate) {
+        String expirationDate;
+
+        do {
+            try {
+                expirationDate = ifBlank(
+                        getProductDate(true, "Enter Product expiration date"),
+                        oldDate
+                );
+                DateUtils.validateExpirationDate(manufacturingDate, expirationDate);
+                break;
+            } catch (Exception e) {
+                DataIOHelper.printlnNotification(e.getMessage());
+                DataIOHelper.displayTryAgainMessage();
+            }
+        } while (true);
+
+        return expirationDate;
+    }
+
+    private String ifBlank(String expect, String replace) {
+        if (expect.isBlank()) {
+            return replace;
+        }
+        return expect;
+    }
+
+    private void processWithUserLoop(Runnable action) {
+        boolean isContinue;
+        do {
+            action.run();
+            DataIOHelper.printlnMessage("--------------------------------");
+            DataIOHelper.printMessage("Do you want to continue(Y/N)? ");
+            isContinue = inputHelper.getString().matches("[\\s{y, Y}]");
+            DataIOHelper.printlnMessage("--------------------------------");
+        } while (isContinue);
     }
 }

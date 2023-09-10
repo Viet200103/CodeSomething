@@ -10,5 +10,9 @@ public interface IProductDao {
 
     void addNewProduct(Product product) throws Exception;
 
-    void deleteProduct(String code) throws Exception;
+    boolean deleteProduct(String code) throws Exception;
+
+    boolean updateProduct(Product product) throws Exception;
+
+    Product loadProduct(String code) throws Exception;
 }

@@ -10,7 +10,7 @@ public class DataIOHelper {
 
     }
 
-    public  int getIntegerNumber() throws Exception {
+    public int getIntegerNumber() throws Exception {
         int number;
         String s;
         s = scanner.nextLine();
@@ -40,16 +40,20 @@ public class DataIOHelper {
         System.out.println(msg);
     }
 
+    public static void printlnNotification(String msg) {
+        System.out.println(">> " + msg);
+    }
+
     public static void printMessage(String msg) {
         System.out.print(msg);
     }
 
     public static void displayTryAgainMessage() {
-        System.out.println("Please try again!.");
+        System.out.println(">> Please try again!.");
     }
 
     public static void displayDateExample() {
-        printlnMessage("Format of Date: dd-mm-yyyy, Ex: 01-01-1970");
+        printlnMessage(">> Format of Date: dd-mm-yyyy, Ex: 01-01-1970");
     }
 
     private static DataIOHelper INSTANCE = null;
