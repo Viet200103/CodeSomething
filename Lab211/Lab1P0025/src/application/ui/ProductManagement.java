@@ -69,9 +69,7 @@ public class ProductManagement {
         String manufacturingDate = getManufacturingDate(false);
         String expirationDate = getExpirationDate(manufacturingDate);
 
-        int quantity = getProductQuantity(false);
-
-        return new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
+        return new Product(code, type, name, maker, manufacturingDate, expirationDate);
     }
 
     private String getProductName() {
@@ -256,11 +254,11 @@ public class ProductManagement {
                     oldProduct.getExpirationDate(), manufacturingDate
             );
 
-            int quantity = getProductQuantity(true);
-
-            if (quantity == -1) {
-                quantity = oldProduct.getQuantity();
-            }
+//            int quantity = getProductQuantity(true);
+//
+//            if (quantity == -1) {
+//                quantity = oldProduct.getQuantity();
+//            }
 
             Product newProduct = new Product(
                     oldProduct.getCode(),
@@ -268,8 +266,7 @@ public class ProductManagement {
                     newName,
                     maker,
                     manufacturingDate,
-                    expirationDate,
-                    quantity
+                    expirationDate
             );
 
             itemService.update(newProduct);

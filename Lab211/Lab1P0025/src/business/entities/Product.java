@@ -11,16 +11,13 @@ public class Product extends Item {
     private String manufacturingDate;
     private String expirationDate;
 
-    private int quantity;
-
     public Product(
             String code,
             ProductType type,
             String name,
             String maker,
             String manufacturingDate,
-            String expirationDate,
-            int quantity
+            String expirationDate
     ) {
         super(code);
         this.name = name;
@@ -28,7 +25,6 @@ public class Product extends Item {
         this.maker = maker;
         this.manufacturingDate = manufacturingDate;
         this.expirationDate = expirationDate;
-        this.quantity = quantity;
     }
 
     public String getName() {
@@ -47,10 +43,6 @@ public class Product extends Item {
         return manufacturingDate;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public String getExpirationDate() {
         return expirationDate;
     }
@@ -59,7 +51,7 @@ public class Product extends Item {
     public String toString() {
         return String.format(
                 "%s, %s, %s, %s, %s, %s, %s",
-                getCode(), type, name, maker, manufacturingDate, expirationDate, quantity
+                getCode(), type, name, maker, manufacturingDate, expirationDate
         );
     }
 }

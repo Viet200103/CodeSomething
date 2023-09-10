@@ -56,11 +56,11 @@ public class ProductDao implements IProductDao {
         String manufacturingDate = raws.get(4).trim();
         String expirationDate = raws.get(5).trim();
 
-        int quantity = Integer.parseInt(
-                raws.get(6).trim()
-        );
+//        int quantity = Integer.parseInt(
+//                raws.get(6).trim()
+//        );
 
-        return new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
+        return new Product(code, type, name, maker, manufacturingDate, expirationDate);
     }
 
     @Override
@@ -121,8 +121,7 @@ public class ProductDao implements IProductDao {
                 + product.getName() + ','
                 + product.getMaker() + ','
                 + product.getManufacturingDate() + ','
-                + product.getManufacturingDate() + ','
-                + product.getQuantity();
+                + product.getManufacturingDate();
 
     }
 }
