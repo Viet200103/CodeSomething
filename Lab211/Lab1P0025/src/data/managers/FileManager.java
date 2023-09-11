@@ -58,8 +58,8 @@ public class FileManager implements IFileManager {
     @Override
     public void saveItem(String rawData) throws Exception {
         try (BufferedWriter bWriter = getWriter()) {
-            bWriter.newLine();
             bWriter.append(rawData);
+            bWriter.newLine();
         }
     }
 
@@ -71,6 +71,7 @@ public class FileManager implements IFileManager {
             String codeExpected = itemCode + ",";
             while ((line = bReader.readLine()) != null) {
                 if (line.startsWith(codeExpected)) {
+                    bReader.close();
                     return true;
                 }
             }
@@ -79,7 +80,7 @@ public class FileManager implements IFileManager {
         return false;
     }
 
-    private BufferedReader getReader() throws FileNotFoundException {
+    public BufferedReader getReader() throws FileNotFoundException {
         FileReader fileReader = new FileReader(inputFile);
         return new BufferedReader(fileReader);
     }

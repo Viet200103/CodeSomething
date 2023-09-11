@@ -13,6 +13,7 @@ public class Main {
             int choice;
 
             do {
+                System.out.println("******Store Program******");
                 Menu.print(
                         "1. Products management" + "|" +
                         "2. Warehouse management" + "|" +
@@ -23,22 +24,14 @@ public class Main {
                 System.out.println("--------------------------------");
 
                 switch (choice) {
-                    case 1 -> {
-                        Menu.callProductManagement();
-                    }
-                    case 2 -> {
-                        Menu.callWarehouseManagement();
-                    }
-                    case 3 -> {
-                        Menu.callReportManagement();
-                    }
+                    case 1 -> Menu.callProductManagement();
+                    case 2 -> Menu.callWarehouseManagement();
+                    case 3 -> Menu.callReportManagement();
                     case 4 -> {
-                        System.out.println("***Your program is stopped***");
+                        System.out.println("***Store Program is stopped***");
                         System.exit(0);
                     }
-                    default -> {
-                        Menu.printRequireNotFound();
-                    }
+                    default -> Menu.printRequireNotFound();
                 }
 
             } while (true);

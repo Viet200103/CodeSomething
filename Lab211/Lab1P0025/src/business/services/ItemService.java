@@ -4,7 +4,7 @@ import business.entities.Product;
 
 public interface ItemService<T> {
 
-    void add(T item) throws Exception;
+    void add(T item);
 
     void delete(String itemCode);
 

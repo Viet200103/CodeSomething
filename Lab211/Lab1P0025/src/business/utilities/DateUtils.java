@@ -1,7 +1,5 @@
 package business.utilities;
 
-import javax.xml.crypto.Data;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.util.Date;
@@ -27,5 +25,11 @@ public class DateUtils {
         if (expDate.before(manDate)) {
             throw new DateTimeException("Expiration date must be after manufacturing date");
         }
+    }
+
+    public static String formatDate(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        return dateFormat.format(date);
     }
 }

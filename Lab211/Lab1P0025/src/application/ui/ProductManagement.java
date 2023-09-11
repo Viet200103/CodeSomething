@@ -7,18 +7,15 @@ import business.services.ProductService;
 import business.utilities.DateUtils;
 import business.utilities.DataValidation;
 import business.utilities.ProductType;
-import data.managers.FileManager;
-import data.managers.IFileManager;
-import data.repositories.ProductRepository;
+import data.repositories.StoreRepository;
 
 public class ProductManagement {
 
-    private final IFileManager fileManager = new FileManager(FileManager.PRODUCT_FILE_NAME);
 
     private final DataIOHelper inputHelper = DataIOHelper.getInstance();
 
     private final ItemService<Product> itemService = new ProductService(
-            ProductRepository.getInstance(fileManager)
+            StoreRepository.getInstance()
     );
 
     public void displayMenu() {
@@ -28,7 +25,7 @@ public class ProductManagement {
             boolean isRunning = true;
 
             do {
-                System.out.println("******Employee Management******");
+                System.out.println("******Product Management******");
                 Menu.print(
                         "1. Add a product" + "|" +
                                 "2. Update a product information" + "|" +
@@ -67,9 +64,11 @@ public class ProductManagement {
         String name = getProductName();
         String maker = getProductMaker();
         String manufacturingDate = getManufacturingDate(false);
-        String expirationDate = getExpirationDate(manufacturingDate);
+        String expirationDate = getExpirationDate(false);
 
-        return new Product(code, type, name, maker, manufacturingDate, expirationDate);
+        int quantity = getProductQuantity(false);
+
+        return new Product(code, type, name, maker, manufacturingDate, expirationDate, quantity);
     }
 
     private String getProductName() {
@@ -103,7 +102,7 @@ public class ProductManagement {
                 DataIOHelper.printlnMessage("Enter Product type: ");
                 Menu.print(
                         "1. Daily usage" + "|" +
-                        "2. Long life usage"
+                                "2. Long life usage"
                 );
 
                 if (acceptEmpty) {
@@ -114,7 +113,7 @@ public class ProductManagement {
 
                     try {
                         typeChoice = Integer.parseInt(sType);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         throw new IllegalArgumentException("The product type is not valid");
                     }
 
@@ -142,22 +141,8 @@ public class ProductManagement {
         return getProductDate(acceptEmpty, "Enter Product manufacturing date");
     }
 
-    private String getExpirationDate(String manufacturingDate) {
-        String expirationDate;
-
-        do {
-            try {
-                expirationDate = getProductDate(true, "Enter Product expiration date");
-                DateUtils.validateExpirationDate(manufacturingDate, expirationDate);
-                break;
-            } catch (Exception e) {
-                DataIOHelper.printlnNotification(e.getMessage());
-                DataIOHelper.displayTryAgainMessage();
-            }
-        } while (true);
-
-
-        return expirationDate;
+    private String getExpirationDate(boolean acceptEmpty) {
+        return getProductDate(acceptEmpty, "Enter Product expiration date");
     }
 
     private String getProductDate(boolean acceptEmpty, String msg) {
@@ -185,35 +170,9 @@ public class ProductManagement {
         return date;
     }
 
-    private int getProductQuantity(boolean acceptEmpty) {
-        int quantity;
-        do {
-            try {
-                String str = inputHelper.getStringWithMessage("Enter Product quantity: ");
-
-                if (str.isBlank() && acceptEmpty) {
-                    return -1;
-                }
-
-                DataValidation.requirePositiveInteger(str, "Quantity of product must be positive integer");
-                quantity = Integer.parseInt(str);
-                break;
-            } catch (Exception e) {
-                DataIOHelper.printlnNotification(e.getMessage());
-                DataIOHelper.displayTryAgainMessage();
-            }
-        } while (true);
-        return quantity;
-    }
-
     private void addNewProduct() {
-        try {
-            Product newEmployee = getProduct();
-            itemService.add(newEmployee);
-            System.out.println(">>Product added successfully.");
-        } catch (Exception e) {
-            System.out.println(">>" + e.getMessage());
-        }
+        Product newProduct = getProduct();
+        itemService.add(newProduct);
     }
 
     private void deleteProduct() {
@@ -235,6 +194,11 @@ public class ProductManagement {
 
         try {
             Product oldProduct = itemService.productExist(code);
+
+            if (oldProduct == null) {
+                return;
+            }
+
             DataIOHelper.printlnNotification(oldProduct.toString());
 
             ProductType productType = getProductType(true);
@@ -250,15 +214,16 @@ public class ProductManagement {
                     oldProduct.getManufacturingDate()
             );
 
-            String expirationDate = getExpirationUpdate(
-                    oldProduct.getExpirationDate(), manufacturingDate
+            String expirationDate = ifBlank(
+                    getExpirationDate(true),
+                    oldProduct.getExpirationDate()
             );
 
-//            int quantity = getProductQuantity(true);
-//
-//            if (quantity == -1) {
-//                quantity = oldProduct.getQuantity();
-//            }
+            int quantity = getProductQuantity(true);
+
+            if (quantity == -1) {
+                quantity = oldProduct.getQuantity();
+            }
 
             Product newProduct = new Product(
                     oldProduct.getCode(),
@@ -266,7 +231,8 @@ public class ProductManagement {
                     newName,
                     maker,
                     manufacturingDate,
-                    expirationDate
+                    expirationDate,
+                    quantity
             );
 
             itemService.update(newProduct);
@@ -277,24 +243,25 @@ public class ProductManagement {
         DataIOHelper.printlnMessage("--------------------------------");
     }
 
-    private String getExpirationUpdate(String oldDate, String manufacturingDate) {
-        String expirationDate;
-
+    private int getProductQuantity(boolean acceptEmpty) {
+        int quantity;
         do {
             try {
-                expirationDate = ifBlank(
-                        getProductDate(true, "Enter Product expiration date"),
-                        oldDate
-                );
-                DateUtils.validateExpirationDate(manufacturingDate, expirationDate);
+                String str = inputHelper.getStringWithMessage("Enter Product quantity: ");
+
+                if (str.isBlank() && acceptEmpty) {
+                    return -1;
+                }
+
+                DataValidation.requirePositiveNumber(str, "Quantity of product must be positive integer");
+                quantity = Integer.parseInt(str);
                 break;
             } catch (Exception e) {
                 DataIOHelper.printlnNotification(e.getMessage());
                 DataIOHelper.displayTryAgainMessage();
             }
         } while (true);
-
-        return expirationDate;
+        return quantity;
     }
 
     private String ifBlank(String expect, String replace) {

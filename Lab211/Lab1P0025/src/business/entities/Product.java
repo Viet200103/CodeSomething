@@ -3,13 +3,15 @@ package business.entities;
 import business.utilities.ProductType;
 
 public class Product extends Item {
-    private String name;
-    private ProductType type;
+    private final String name;
+    private final ProductType type;
 
-    private String maker;
+    private final String maker;
 
-    private String manufacturingDate;
-    private String expirationDate;
+    private final String manufacturingDate;
+    private final String expirationDate;
+
+    private final int quantity;
 
     public Product(
             String code,
@@ -17,7 +19,8 @@ public class Product extends Item {
             String name,
             String maker,
             String manufacturingDate,
-            String expirationDate
+            String expirationDate,
+            int quantity
     ) {
         super(code);
         this.name = name;
@@ -25,6 +28,7 @@ public class Product extends Item {
         this.maker = maker;
         this.manufacturingDate = manufacturingDate;
         this.expirationDate = expirationDate;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -47,11 +51,15 @@ public class Product extends Item {
         return expirationDate;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "%s, %s, %s, %s, %s, %s, %s",
-                getCode(), type, name, maker, manufacturingDate, expirationDate
+                "%s,%s,%s,%s,%s,%s,%s",
+                getCode(), type, name, maker, manufacturingDate, expirationDate, quantity
         );
     }
 }

@@ -1,13 +1,13 @@
 package business.services;
 
 import business.entities.Product;
-import data.repositories.IProductRepository;
+import data.repositories.IStoreRepository;
 
 public class ProductService implements ItemService<Product> {
 
-    private final IProductRepository pRepository;
+    private final IStoreRepository pRepository;
 
-    public ProductService(IProductRepository pRepository) {
+    public ProductService(IStoreRepository pRepository) {
         this.pRepository = pRepository;
     }
 
@@ -37,8 +37,13 @@ public class ProductService implements ItemService<Product> {
     }
 
     @Override
-    public void add(Product item) throws Exception {
-        pRepository.addNewProduct(item);
+    public void add(Product item) {
+        try {
+            pRepository.addNewProduct(item);
+            System.out.println(">>Product added successfully.");
+        } catch (Exception e) {
+            System.out.println(">>" + e.getMessage());
+        }
     }
 
     @Override
@@ -52,7 +57,7 @@ public class ProductService implements ItemService<Product> {
             }
         } catch (Exception e) {
             System.out.println(">> Delete product with code: " + itemCode + " is failed!.");
-            System.out.println(e.getMessage());
+            System.out.println(">> " + e.getMessage());
         }
     }
 

@@ -16,15 +16,17 @@ public final class Menu {
     }
 
     public static void callProductManagement() {
-        ProductManagement menu = new ProductManagement();
-        menu.displayMenu();
+        ProductManagement management = new ProductManagement();
+        management.displayMenu();
     }
 
     public static void callWarehouseManagement() {
-
+        WarehouseManagement management = new WarehouseManagement();
+        management.displayMenu();
     }
 
     public static void callReportManagement() {
-
+        ReportManagement management = new ReportManagement();
+        management.displayMenu();
     }
 }
