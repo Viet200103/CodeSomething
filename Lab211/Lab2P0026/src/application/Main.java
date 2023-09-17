@@ -1,40 +1,44 @@
 package application;
 
-import application.ui.FlightManagement;
-import application.ui.Menu;
+import application.ui.*;
 import application.utilities.DataIOHelper;
 
 public class Main {
     public static void main(String[] args) {
-
         DataIOHelper inputHelper = DataIOHelper.getInstance();
-        FlightManagement fManagement = new FlightManagement();
-
         try {
             int choice;
 
             do {
-                System.out.println("******Store Program******");
+                System.out.println("******Flight Program******");
                 Menu.print(
-                        "1. Create flight" + "|" +
-                                "2. Reservation & booking" + "|" +
-                                "3. Check-in & assignment" + "|" +
-                                "4. Crew access" + "|" +
-                                "5. Administrator access" + "|" +
-                                "6. Print flight list" + "|" +
-                                "7. Exit"
+                        "1. Reservation & booking" + "|" +
+                        "2. Check-in & assignment" + "|" +
+                        "3. Admin access" + "|" +
+                        "4. Crew access" + "|" +
+                        "5. Save" + "|" +
+                        "6. Exit"
                 );
-                choice = inputHelper.getIntegerNumber();
+                try {
+                    choice = inputHelper.getIntegerNumber();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("--------------------------------");
 
                 switch (choice) {
-                    case 1 -> fManagement.processSchedule();
-                    case 2 -> fManagement.processBooking();
-                    case 3 -> {}
-                    case 4 -> {}
-                    case 5 -> {}
-                    case 6 -> fManagement.printFlightList();
-                    case 7 -> {
+                    case 1 -> {
+                        PassengerManagement ps = new PassengerManagement();
+                        ps.processBooking();
+                    }
+                    case 2 -> {
+                        PassengerManagement ps = new PassengerManagement();
+                        ps.processCheckIn();
+                    }
+                    case 3-> (new AdministratorsManagement()).displayMenu();
+                    case 4 -> (new CrewManagement()).displayMenu();
+                    case 5 -> (new AdministratorsManagement()).saveProgram();
+                    case 6 -> {
                         System.out.println("***Store Program is stopped***");
                         System.exit(0);
                     }

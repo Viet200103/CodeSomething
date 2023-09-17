@@ -1,22 +1,18 @@
 package business.entity;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Flight {
-    private String flightNumber;
-
-    private String airline;
-
-    private String departureLocation;
-    private String destinationLocation;
-    private String departureDate;
-
-    private String departureTime;
-    private String arrivalDate;
-
-    private String arrivalTime;
-
-    private Set<String> availableSeats;
+    private final String flightNumber;
+    private final String airline;
+    private final String departureLocation;
+    private final String destinationLocation;
+    private final String departureDate;
+    private final String departureTime;
+    private final String arrivalDate;
+    private final String arrivalTime;
+    private final LinkedHashSet<String> availableSeats;
 
     public Flight(
             String flightNumber,
@@ -27,7 +23,7 @@ public class Flight {
             String departureTime,
             String arrivalDate,
             String arrivalTime,
-            Set<String> availableSeats) {
+            LinkedHashSet<String> availableSeats) {
         this.flightNumber = flightNumber;
         this.airline = airline;
         this.departureLocation = departureLocation;
@@ -71,6 +67,18 @@ public class Flight {
         return !availableSeats.isEmpty();
     }
 
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+        public Boolean isAvailableSeats(String seat) {
+        return availableSeats.contains(seat);
+    }
+
     @Override
     public String toString() {
 
@@ -78,7 +86,7 @@ public class Flight {
                 "\n" +
                 airline.toUpperCase() +
                 "\n" +
-                "FROM TRIP " + departureLocation.toUpperCase() + " TO" + destinationLocation.toUpperCase() +
+                "FROM TRIP " + departureLocation.toUpperCase() + " TO " + destinationLocation.toUpperCase() +
                 "\n" +
                 "FLIGHT NUMBER: " + flightNumber +
                 "\n" +
@@ -87,5 +95,9 @@ public class Flight {
                 "ARRIVING AT: " + arrivalTime +
                 "\n" +
                 "AVAILABLE SEATS: " + availableSeats;
+    }
+
+    public boolean chooseSeat(String seat) {
+        return availableSeats.remove(seat);
     }
 }
