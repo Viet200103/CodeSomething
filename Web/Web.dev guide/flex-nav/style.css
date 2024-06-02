@@ -1,0 +1,38 @@
+body {
+    font-family: sans-serif;
+    padding: 0;
+}
+
+nav {
+    background: #bdb7b7;
+    padding: 0.5em 0;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin: 0 8px;
+    text-transform: uppercase;
+}
+
+nav a {
+    padding: .5em;
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: .5em;
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:focus {
+    outline: 4px solid orange;
+}
+
+nav li:nth-child(5) {
+    margin-inline-start: auto;
+}

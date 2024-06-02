@@ -1,0 +1,34 @@
+@import url(https://codepen.io/web-dot-dev/pen/abpoXGZ.css);
+
+#svg-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2%;
+}
+
+.container {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary-x-light);
+}
+
+.wrapper {
+  margin-bottom: 2%;
+}
+
+.sub2:nth-child(1) {
+  flex: 1;
+}
+
+.sub2:nth-child(2) {
+  flex: 2;
+}
+
+.sub2:nth-child(3) {
+  flex: 3;
+}

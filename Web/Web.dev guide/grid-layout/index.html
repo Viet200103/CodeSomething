@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid</title>
+
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<main>
+    <img src="https://web.dev/static/learn/css/grid/image/a-diagram-representation-698262526ded7.svg" alt="">
+    <img src="https://web.dev/static/learn/css/grid/image/a-diagram-representation-0e420830e6edf.svg" alt="">
+    <img src="https://web.dev/static/learn/css/grid/image/a-diagram-representation-d49cf4f161c21.svg" alt="">
+    <img src="https://web.dev/static/learn/css/grid/image/a-diagram-representation-b44240d539b8f.svg" alt="">
+    <img src="https://web.dev/static/learn/css/grid/image/a-diagram-representation-eb9bf3fcb985c.svg" alt="">
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Intrinsic grid sizing</h1>
+            <figure class="callout">
+                <p>
+                    Use the dropdown to change the column sizes between the different intrinsic sizing keywords.
+                </p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose column size
+                    <select id="switcher-intrinsic-sizing">
+                        <option value="auto">auto</option>
+                        <option value="min-content">min-content</option>
+                        <option value="max-content">max-content</option>
+                        <option value="fit-content(7em)">fit-content(7em)</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-intrinsic-sizing">
+                <div class="box">Item one</div>
+                <div class="box">Item two</div>
+                <div class="box">Item three has more text </div>
+                <div class="box">Item four</div>
+                <div class="box">Item five</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>The <code>fr</code> unit</h1>
+            <figure class="callout">
+                <p>In this example the grid container creates a grid with three column tracks of 1fr. Change the value of the final track.</p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose column size of third track
+                    <select id="switcher-fr-unit">
+                        <option value="1fr">1fr</option>
+                        <option value="2fr">2fr</option>
+                        <option value="3fr">3fr</option>
+                        <option value="4fr">4fr</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-fr-unit">
+                <div class="box">Item one</div>
+                <div class="box">Item two</div>
+                <div class="box blue">Item three has more text </div>
+                <div class="box">Item four</div>
+                <div class="box">Item five</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1><code>auto-fill</code> vs <code>auto-fit</code></h1>
+            <figure class="callout">
+                <p>In this example there will be as many tracks as will fit into the container with a minimum size of 100px.</p>
+                <p><code>grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));</code></p>
+                <p>Change between auto-fill and auto-fit keywords to see the difference when our first row is not filled with items.</p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose column size
+                    <select id="switcher-auto-fill-fit">
+                        <option value="auto-fill">auto-fill</option>
+                        <option value="auto-fit">auto-fit</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-auto-fill-fit">
+                <div class="box">Item one</div>
+                <div class="box">Item two</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Grid auto flow</h1>
+            <figure class="callout">
+                <p>In this example try changes auto-flow from row to column and also change the writing mode.</p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose auto flow
+                    <select id="switcher-grid-flow">
+                        <option value="row">row</option>
+                        <option value="column">column</option>
+                    </select>
+                </label>
+                <label>
+                    Choose writing mode
+                    <select id="switcher-writing-mode">
+                        <option value="horizontal-tb">horizontal-tb</option>
+                        <option value="vertical-rl">vertical-rl</option>
+                        <option value="vertical-lr">vertical-lr</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-auto-flow">
+                <div class="box">Item one</div>
+                <div class="box">Item two</div>
+                <div class="box">Item three has more text </div>
+                <div class="box">Item four</div>
+                <div class="box">Item five</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Grid dense and sparse packing</h1>
+            <figure class="callout">
+                <p>Change the packing mode to see how this changes the layout of items.</p>
+            </figure>
+            <div class="controls">
+                <label class="toggle" for="toggle-grid-packing">
+                    <span class="toggle__label">Turn on dense packing</span>
+                    <input type="checkbox" role="switch" class="toggle__element" id="toggle-grid-packing">
+                    <div class="toggle__decor" aria-hidden="true">
+                        <div class="toggle__thumb"></div>
+                    </div>
+                </label>
+            </div>
+            <div class="container" id="container-grid-packing">
+                <div class="box span-row">Item one</div>
+                <div class="box">Item two</div>
+                <div class="box span-col">Item three has more text </div>
+                <div class="box">Item four</div>
+                <div class="box">Item five</div>
+                <div class="box">Item six</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Grid stacking and <code>z-index</code></h1>
+            <figure class="callout">
+                <p>Toggle item one’s <code>z-index</code> to see how it affects stacking.</p>
+            </figure>
+            <div class="controls">
+
+                <label class="toggle" for="toggle-grid-z-index">
+                    <span class="toggle__label">Switch “item one” to have a <code>z-index</code> of 2</span>
+                    <input type="checkbox" role="switch" class="toggle__element" id="toggle-grid-z-index">
+                    <div class="toggle__decor" aria-hidden="true">
+                        <div class="toggle__thumb"></div>
+                    </div>
+                </label>
+            </div>
+            <div class="container" id="container-grid-z-index">
+
+                <div class="box z-box bg-primary color-light" id="box-z-index-item-one">Item one</div>
+                <div class="box z-box">Item two</div>
+                <div class="box z-box">Item three has more text </div>
+                <div class="box z-box">Item four</div>
+                <div class="box z-box">Item five</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Extra space in the grid container</h1>
+            <figure class="callout">
+                <p>The <code>align-content</code> property distributes space in the block direction. The <code>justify-content</code> property in the inline direction.</p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose aligment
+                    <select id="switcher-extra-space-alignment">
+                        <option value="stretch">stretch</option>
+                        <option value="start">start</option>
+                        <option value="end">end</option>
+                        <option value="center">center</option>
+                        <option value="space-between">space-between</option>
+                        <option value="space-around">space-around</option>
+                        <option value="space-evenly">space-evenly</option>
+                    </select>
+                </label>
+                <label>
+                    Choose justification
+                    <select id="switcher-extra-space-justification">
+                        <option value="stretch">stretch</option>
+                        <option value="start">start</option>
+                        <option value="end">end</option>
+                        <option value="center">center</option>
+                        <option value="space-between">space-between</option>
+                        <option value="space-around">space-around</option>
+                        <option value="space-evenly">space-evenly</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-extra-space">
+                <div class="box extra-box">Item one</div>
+                <div class="box extra-box">Item two</div>
+                <div class="box extra-box">Item three</div>
+                <div class="box extra-box">Item four</div>
+                <div class="box extra-box">Item five</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="wrapper">
+        <article class="flow">
+            <h1>Extra space in the grid container</h1>
+            <figure class="callout">
+                <p>The <code>align-items</code> property distributes space in the block direction. The <code>justify-items</code> property in the inline direction.</p>
+            </figure>
+            <div class="controls">
+                <label>
+                    Choose aligment
+                    <select id="switcher-grid-align-items">
+                        <option value="stretch">stretch</option>
+                        <option value="start">start</option>
+                        <option value="end">end</option>
+                        <option value="center">center</option>
+                    </select>
+                </label>
+                <label>
+                    Choose justification
+                    <select id="switcher-grid-justification-items">
+                        <option value="stretch">stretch</option>
+                        <option value="start">start</option>
+                        <option value="end">end</option>
+                        <option value="center">center</option>
+                    </select>
+                </label>
+            </div>
+            <div class="container" id="container-extra-space-items">
+                <div class="box extra-item">Item one</div>
+                <div class="box extra-item">Item two</div>
+                <div class="box extra-item">Item three</div>
+                <div class="box extra-item">Item four</div>
+                <div class="box extra-item">Item five</div>
+            </div>
+        </article>
+    </div>
+</main>
+
+<script src="javascript.js"></script>
+</body>
+</html>

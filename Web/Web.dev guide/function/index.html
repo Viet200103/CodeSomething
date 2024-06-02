@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+    <main>
+        <section class="wrapper">
+            <h1>The rotate functions</h1>
+            <article class="flow">
+                <figure class="callout">
+                    <p>
+                        Use the slider to see how each of the rotate functions affect the boxes.
+                    </p>
+                </figure>
+                <label>
+                    Rotate the boxes
+                    <input type="range" min="0" max="360" value="0" />
+                </label>
+                <div class="boxes">
+                    <div data-transform="x"><code>rotateX()</code></div>
+                    <div data-transform="y"><code>rotateY()</code></div>
+                    <div data-transform="z"><code>rotateZ()</code></div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script src=scripts.js></script>
+</body>
+</html>
