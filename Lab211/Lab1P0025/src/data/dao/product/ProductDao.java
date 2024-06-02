@@ -4,6 +4,7 @@ import business.entities.Product;
 import business.utilities.ProductType;
 import data.managers.IFileManager;
 
+import java.io.File;
 import java.util.*;
 
 public class ProductDao implements IProductDao {

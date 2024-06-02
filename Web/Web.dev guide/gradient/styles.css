@@ -1,0 +1,114 @@
+@import url(https://codepen.io/web-dot-dev/pen/gOgYqvz.css);
+
+.intro {
+    width: 100%;
+    background: linear-gradient(to top, #3c006b, #9948d9);
+    color: white;
+    padding: 7rem 2rem 4rem 2rem;
+    margin-bottom: 2em;
+}
+
+
+.intro h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    max-width: 18ch;
+}
+
+.intro p {
+    font-size: 1.1rem;
+    max-width: 50ch;
+}
+
+.intro a {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: currentColor;
+}
+
+.intro > * + * {
+    margin-top: 1.5em;
+}
+
+body {
+    padding: 0;
+}
+
+.gradient-content {
+    padding: 0 2em 2em;
+    width: 100%;
+}
+
+.gradient-content h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    max-width: 18ch;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.gradient-content h1:nth-child(1) {
+    margin-top: 0;
+}
+
+.gradient-content-grid {
+    display: grid;
+    grid-auto-rows: minmax(250px, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    justify-content: end;
+    gap: 10px;
+}
+
+.gradient-content-1 {
+    background: linear-gradient(black, white);
+}
+
+.gradient-content-2 {
+    background: linear-gradient(to right, black, white);
+}
+
+.gradient-content-3 {
+    background: linear-gradient(45deg, darkred 30%, crimson);
+}
+
+.gradient-content-4 {
+    background: linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque);
+}
+
+.gradient-content-5 {
+    background: radial-gradient(closest-side, darkorange 60%, gold, bisque, darkred 20%, crimson);
+}
+
+.gradient-content-6 {
+    background: radial-gradient(darkred 20%, crimson, darkorange 60%, gold, bisque);
+}
+
+.gradient-content-7 {
+    background: conic-gradient(white, black);
+}
+
+.gradient-content-8 {
+    background: conic-gradient(from 50deg at 50% 50%, white, black);
+}
+
+.gradient-content-9 {
+    background: conic-gradient(
+            gold 20deg, lightcoral 20deg 190deg, mediumturquoise 190deg 220deg, plum 220deg 320deg, steelblue 320deg
+    );
+}
+
+.gradient-content-10 {
+    background: repeating-linear-gradient(
+            45deg,
+            red,
+            red 30px,
+            white 30px,
+            white 60px
+    );
+}
+
+.gradient-content-11 {
+    background: linear-gradient(-45deg, blue -30%, transparent 80%), linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque);
+}
